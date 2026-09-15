@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<title>Comments // Wood & Wisdom</title>
+</head>
+<body bgcolor="#EEEEEE" text="#333333" link="#0088CC" vlink="#005580" alink="#FF6600" onload="loadComments();">
+
+<!-- MAIN WRAPPER CONTAINER -->
+<table border="0" width="800" align="center" cellpadding="0" cellspacing="0">
+<tr>
+    <!-- HEADER -->
+    <td bgcolor="#005580" align="left" style="padding: 25px 40px;">
+        <font face="Arial, Helvetica" size="6" color="#FFFFFF">
+            <b>Wood & Wisdom</b>
+        </font><br>
+        <font size="2" color="#BBEEFF">
+            Discussion: Why Standard Masonite is Killing the Clipboard
+        </font>
+    </td>
+</tr>
+
+<!-- NAVIGATION BAR -->
+<tr bgcolor="#0088cc">
+    <td align="left" style="padding: 10px 40px;">
+        <font face="Arial" size="2">
+            <a href="../index.html" style="color: #ffffff; font-weight: bold;">&laquo; Back to Main Blog</a>
+        </font>
+    </td>
+</tr>
+
+<tr bgcolor="#FFFFFF">
+    <!-- COMMENTS AREA -->
+    <td style="padding: 30px 40px;">
+        <font face="Arial, Helvetica, sans-serif" size="3">
+            
+            <font size="4" color="#005580">
+                <b>Reader Comments</b>
+            </font>
+            <br><br>
+
+            <!-- CONTAINER TABLE FOR ALL COMMENTS -->
+            <table border="0" width="100%" cellpadding="0" cellspacing="0">
+                <!-- STATIC COMMENT 1 -->
+                <tr>
+                    <td bgcolor="#F9F9F9" style="padding: 12px; border: 1px solid #E5E5E5;">
+                        <font size="2"><b>StationeryFanatic99</b> said on July 15, 2008:</font><br>
+                        <font size="2" color="#333333">Preach!! I dropped my cheap target clipboard yesterday and the corner completely frayed into fuzzy brown sawdust. Rosewood wouldn't do that.</font>
+                    </td>
+                </tr>
+                <tr><td><br></td></tr>
+                
+                <!-- STATIC COMMENT 2 -->
+                <tr>
+                    <td bgcolor="#F9F9F9" style="padding: 12px; border: 1px solid #E5E5E5;">
+                        <font size="2"><b>MikesWoodShop</b> said on July 15, 2008:</font><br>
+                        <font size="2" color="#333333">Woodworker here. Brazilian Rosewood is highly regulated now due to over-harvesting, but East Indian Rosewood would make a killer heavy-duty writing deck. Hard as nails.</font>
+                    </td>
+                </tr>
+                <tr><td><br></td></tr>
+            </table>
+
+            <!-- TARGET FOR INJECTED STRIP OF USER COMMENTS -->
+            <table border="0" width="100%" cellpadding="0" cellspacing="0" id="user-comments-table">
+                <!-- User submitted posts loop here synchronously -->
+            </table>
+
+            <!-- SEPARATOR -->
+            <hr size="1" color="#CCCCCC">
+            <br>
+
+            <!-- ADD COMMENT FORM -->
+            <table border="0" width="100%" cellpadding="15" cellspacing="0" bgcolor="#EEEEEE" style="border: 1px solid #CCCCCC;">
+                <tr>
+                    <td>
+                        <font size="3" color="#333333"><b>Leave a Reply</b></font>
+                        <br><br>
+                        
+                        <table border="0" cellpadding="4" cellspacing="0">
+                            <tr>
+                                <td valign="middle"><font size="2">Name:</font></td>
+                                <td><input type="text" id="author" size="30"></td>
+                            </tr>
+                            <tr>
+                                <td valign="top"><font size="2">Comment:</font></td>
+                                <td><textarea id="comment" cols="50" rows="4"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="button" value="Submit Comment" onclick="saveComment();">
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+        </font>
+    </td>
+</tr>
+
+<!-- FOOTER -->
+<tr>
+    <td bgcolor="#333333" align="center" style="padding: 15px;">
+        <font face="Arial" color="#999999" size="2">
+            Copyright &#169; 2008 Woody's Clipboard Page.
+        </font>
+    </td>
+</tr>
+</table>
+
+<!-- STORAGE LOGIC -->
+<script type="text/javascript">
+function loadComments() {
+    var table = document.getElementById('user-comments-table');
+    table.innerHTML = ''; 
+    
+    var existing = localStorage.getItem('clipboard_blog_comments');
+    if (existing) {
+        var commentsList = JSON.parse(existing);
+        var htmlStr = '';
+        
+        for (var i = 0; i < commentsList.length; i++) {
+            htmlStr += '<tr><td bgcolor="#F9F9F9" style="padding: 12px; border: 1px solid #E5E5E5;">';
+            htmlStr += '<font size="2"><b>' + escapeHtml(commentsList[i].user) + '</b> said on ' + escapeHtml(commentsList[i].date) + ':</font><br>';
+            htmlStr += '<font size="2" color="#333333">' + escapeHtml(commentsList[i].msg) + '</font>';
+            htmlStr += '</td></tr><tr><td><br></td></tr>';
+        }
+        table.innerHTML = htmlStr;
+    }
+}
+
+function saveComment() {
+    var nameField = document.getElementById('author');
+    var textField = document.getElementById('comment');
+    var name = nameField.value.trim();
+    var text = textField.value.trim();
+    
+    if (name && text) {
+        var existing = localStorage.getItem('clipboard_blog_comments');
+        var commentsList = existing ? JSON.parse(existing) : [];
+        
+        commentsList.push({
+            user: name,
+            msg: text,
+            date: new Date().toLocaleDateString()
+        });
+        
+        localStorage.setItem('clipboard_blog_comments', JSON.stringify(commentsList));
+        
+        nameField.value = '';
+        textField.value = '';
+        
+        loadComments();
+    }
+}
+
+function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+</script>
+
+</body>
+</html>
